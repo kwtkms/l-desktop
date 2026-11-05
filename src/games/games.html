@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+<title>Jouer avec L</title>
+<link rel="stylesheet" href="games.css">
+</head>
+<body>
+<header>
+  <div class="brand"><b>L</b><span>salle de jeux</span></div>
+  <nav id="tabs">
+    <button data-game="chess" class="on">Échecs</button>
+    <button data-game="ttt">Morpion</button>
+    <button data-game="c4">Puissance 4</button>
+  </nav>
+  <button id="mute" class="icon" title="Son">♪</button>
+</header>
+
+<main>
+  <!-- him, across the table -->
+  <aside id="him">
+    <div id="said"></div>
+    <canvas id="lcan"></canvas>
+    <div class="nameplate">
+      <b>L</b>
+      <span id="mood">t’attend</span>
+    </div>
+    <div id="tally"></div>
+  </aside>
+
+  <section id="chess" class="game on">
+    <div class="table">
+      <div id="evalbar" title="ce qu’il pense de la position"><i></i></div>
+      <div id="board">
+        <div id="squares"></div>
+        <div id="pieces"></div>
+        <svg id="arrows" viewBox="0 0 800 800" aria-hidden="true"></svg>
+        <div id="promo" class="sheet" hidden></div>
+        <div id="chessEnd" class="sheet" hidden></div>
+      </div>
+    </div>
+    <div class="side">
+      <div class="row">
+        <label>Niveau
+          <select id="level">
+            <option value="3">débutant</option>
+            <option value="0">distrait</option>
+            <option value="1" selected>sérieux</option>
+            <option value="2">vexé</option>
+          </select>
+        </label>
+        <label>Tu as
+          <select id="side">
+            <option value="w" selected>les blancs</option>
+            <option value="b">les noirs</option>
+          </select>
+        </label>
+      </div>
+      <div class="taken"><span id="takenHim"></span><em id="diffHim"></em></div>
+      <ol id="moves"></ol>
+      <div class="taken"><span id="takenYou"></span><em id="diffYou"></em></div>
+      <div class="row buttons">
+        <button id="chessNew" class="main">Nouvelle partie</button>
+        <button id="chessUndo">Annuler</button>
+        <button id="chessHint" title="Il te montre le coup qu’il jouerait à ta place">Indice</button>
+        <button id="chessFlip" title="Retourner l’échiquier">⇅</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="ttt" class="game">
+    <div class="table">
+      <svg id="tttBoard" viewBox="0 0 300 300"></svg>
+      <div id="tttEnd" class="sheet" hidden></div>
+    </div>
+    <div class="side">
+      <p class="hint">Tu as les ✕. Celui qui commence change à chaque partie.</p>
+      <div class="row buttons"><button id="tttNew" class="main">Nouvelle partie</button></div>
+    </div>
+  </section>
+
+  <section id="c4" class="game">
+    <div class="table">
+      <div id="c4Wrap">
+        <div id="c4Ghost"><i></i></div>
+        <div id="c4Board"></div>
+      </div>
+      <div id="c4End" class="sheet" hidden></div>
+    </div>
+    <div class="side">
+      <p class="hint">Tu as les rouges, tu commences.</p>
+      <div class="row buttons"><button id="c4New" class="main">Nouvelle partie</button></div>
+    </div>
+  </section>
+</main>
+
+<footer id="status">À toi.</footer>
+
+<script src="../renderer/body.js"></script>
+<script src="chess.js"></script>
+<script src="small.js"></script>
+<script src="pieces.js"></script>
+<script src="games.js"></script>
+</body>
+</html>

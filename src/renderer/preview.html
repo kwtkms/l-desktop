@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>L</title>
+<style>html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; } canvas { display: block; width: 100%; height: 100%; }</style>
+<canvas id="c"></canvas>
+<script src="body.js"></script>
+<script>
+  // For the app that chooses a character: him, doing nothing much.
+  const { POSES, draw, tower, blend } = window.LBody;
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const live = { ...POSES.idle, gx: 0.2, gy: 0 };
+  const cycle = ['thumb', 'idle', 'walk', 'stand', 'rub', 'eat', 'think', 'sit', 'sitLook', 'berry', 'idle'];
+  // up on his feet he takes more room, and sitting his legs hang below his seat
+  const view = { tall: 160, lift: 0 };
+  const VIEWS = { stride: { tall: 255, lift: 0 }, sit: { tall: 185, lift: 85 } };
+  let i = 0;
+  let pose = 'thumb';
+  setInterval(() => { pose = cycle[i++ % cycle.length]; }, 3400);
+  let t = 0;
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    t += dt;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+    blend(live, POSES[pose], 1 - Math.exp(-dt * 7));
+    live.item = POSES[pose].item;
+    live.walk = POSES[pose].walk;
+    live.phase = t * 0.72;
+    live.lookX = Math.sin(t * 0.7) * 0.7;
+    live.lookY = Math.sin(t * 0.43) * 0.3;
+    live.eye = Math.sin(t * 0.9) > 0.985 ? 0 : POSES[pose].eye;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    blend(view, VIEWS[POSES[pose].sprite] || { tall: 160, lift: 0 }, 1 - Math.exp(-dt * 7));
+    const s = Math.min(canvas.clientWidth / 190, (canvas.clientHeight - 20) / view.tall);
+    ctx.translate(canvas.clientWidth / 2 - 8 * s, canvas.clientHeight - 14 - view.lift * s);
+    ctx.scale(s, s);
+    if (!VIEWS[POSES[pose].sprite]) tower(ctx, 5, t);
+    draw(ctx, live, t);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>

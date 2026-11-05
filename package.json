@@ -1,0 +1,12 @@
+{
+  "name": "l-desktop",
+  "version": "0.1.0",
+  "description": "L, a desktop companion with his own small neural net, written without any ML library.",
+  "main": "src/main/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "train": "node scripts/train.mjs",
+    "test": "node --test test/"
+  }
+}
