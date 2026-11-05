@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+<body style="margin:0;background:#20242c;overflow:hidden">
+<canvas id="c" width="1500" height="1000"></canvas>
+<script src="../src/renderer/body.js"></script>
+<script>
+const ctx = document.getElementById('c').getContext('2d');
+LBody.ready.then(() => {
+  // half on a dark window, half on a light one: what's badly cut shows on one of them
+  ctx.fillStyle = '#d9dde3';
+  ctx.fillRect(750, 0, 750, 1000);
+  const names = Object.keys(LBody.POSES);
+  names.forEach((name, i) => {
+    const col = i % 7;
+    const row = Math.floor(i / 7);
+    const p = { ...LBody.POSES[name], still: true, gx: 0, gy: 0, phase: 1 };
+    ctx.save();
+    ctx.translate(90 + col * 212, 255 + row * 330);
+    ctx.fillStyle = '#555';
+    ctx.fillRect(-85, 0, 190, 2);
+    LBody.draw(ctx, p, 1);
+    if (name === 'reach') LBody.tower(ctx, 4, 1);
+    ctx.restore();
+    ctx.fillStyle = col > 2 ? '#000' : '#fff';
+    ctx.font = '15px sans-serif';
+    ctx.fillText(name, 6 + col * 212, 18 + row * 330);
+  });
+  document.title = 'ready';
+});
+</script>
